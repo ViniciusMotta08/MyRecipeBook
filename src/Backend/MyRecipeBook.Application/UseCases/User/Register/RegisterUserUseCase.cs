@@ -1,4 +1,5 @@
-﻿using MyRecipeBook.Communication.Requests;
+﻿using MyRecipeBook.Application.Services.AutoMapper;
+using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Exceptions.ExceptionsBase;
 
@@ -10,10 +11,15 @@ namespace MyRecipeBook.Application.UseCases.User.Register
         {
             Validate(request);
 
+            var autoMapper = new AutoMapper.MapperConfiguration(options =>
+            {
+                options.AddProfile(new AutoMapping());
+            }).CreateMapper();
 
+            var user = autoMapper.Map<Domain.Entities.User>(request);
 
             return new ResponseRegisteredUserJson
-            { 
+            {
                 Name = request.Name
             };
         }
